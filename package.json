@@ -1,0 +1,9 @@
+{
+  "name": "fct-spare-parts-pdf",
+  "private": true,
+  "scripts": {
+    "push": "clasp.cmd push",
+    "deploy": "powershell -ExecutionPolicy Bypass -File ./deploy-clasp.ps1",
+    "deploy:desc": "powershell -ExecutionPolicy Bypass -File ./deploy-clasp.ps1"
+  }
+}
