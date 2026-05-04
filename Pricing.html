@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <?!= include('shared_ui'); ?>
+    <?!= include('shared_styles'); ?>
+    <?!= include('shared_form_helpers'); ?>
+  </head>
+
+  <body>
+    <?!= include('shared_nav', { routes: routes, currentPage: currentPage }); ?>
+
+    <main class="main-content">
+      <div class="page-wrap">
+        <div class="card shadow-sm content-card">
+          <div class="card-body p-4 p-md-5">
+            <h1 class="text-center mb-2">FCT Spare Part Pricing Generator</h1>
+            <p class="text-center text-muted" id="userInfo">Loading user...</p>
+
+            <div class="alert alert-info mb-4">
+              Create a Best and Final Pricing PDF using the parts listed in
+              <b>Materials_List</b>.
+            </div>
+
+            <form id="pricingForm" autocomplete="off" class="row g-3">
+              <div class="col-12">
+                <div class="section-title">Section 1 — Proposal Information</div>
+                <hr class="mt-2 mb-1" />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label req">Proposal #</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="proposalNumber"
+                  id="proposalNumber"
+                  value="M-005"
+                  required
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label req">Pricing Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="pricingDate"
+                  id="pricingDate"
+                  required
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label req">Project Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="projectName"
+                  id="projectName"
+                  value="Project Name / Address"
+                  required
+                />
+              </div>
+
+              <div class="col-12">
+                <div class="section-title mt-3">Section 2 — Customer Information</div>
+                <hr class="mt-2 mb-1" />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label req">Customer Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="customerName"
+                  id="customerName"
+                  value="Customer Name"
+                  required
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Customer Role</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="customerRole"
+                  id="customerRole"
+                  value="Owner / Representative"
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Company Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="companyName"
+                  id="companyName"
+                  value="Company Name"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Address Line 1</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="addressLine1"
+                  id="addressLine1"
+                  value="Project / Customer Address Line 1"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Address Line 2</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="addressLine2"
+                  id="addressLine2"
+                  value="City, State ZIP"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Customer Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="customerEmail"
+                  id="customerEmail"
+                  value="customer@example.com"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Customer Phone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="customerPhone"
+                  id="customerPhone"
+                  value="000 000 0000"
+                />
+              </div>
+
+              <div class="col-12">
+                <div class="section-title mt-3">Section 3 — Materials / Parts</div>
+                <hr class="mt-2 mb-1" />
+              </div>
+
+              <div class="col-12">
+                <div id="materialsContainer"></div>
+
+                <div class="text-end mt-3">
+                  <strong>Total: $<span id="materialsGrandTotal">0.00</span></strong>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="section-title mt-3">Section 4 — Delivery / Signature</div>
+                <hr class="mt-2 mb-1" />
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label">Delivery Location</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="deliveryLocation"
+                  id="deliveryLocation"
+                  value="Project location"
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Estimator Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="estimatorName"
+                  id="estimatorName"
+                  value="Jesus Orona"
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Estimator Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="estimatorTitle"
+                  id="estimatorTitle"
+                  value="Project Manager/Estimator"
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Estimator Phone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="estimatorPhone"
+                  id="estimatorPhone"
+                  value="585 412 2179"
+                />
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Additional Comments</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="comments"
+                  id="comments"
+                  value="Please review pricing, lead time, and payment terms before approval."
+                />
+              </div>
+
+              <div class="col-12 d-flex align-items-center gap-3 mt-2">
+                <button class="btn btn-secondary" id="btnSave" type="submit">
+                  <i class="fas fa-file-pdf me-1"></i>
+                  Save and Generate PDF
+                </button>
+
+                <div id="msg" class="text-muted text-muted-sm"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="loadingOverlay" class="loading-overlay hidden">
+      <div class="loading-box text-center">
+        <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+        <div id="loadingText">Loading...</div>
+      </div>
+    </div>
+
+    <script>
+      const userInfo = document.getElementById("userInfo");
+      const form = document.getElementById("pricingForm");
+      const msg = document.getElementById("msg");
+      const btn = document.getElementById("btnSave");
+
+      const materialsContainer = document.getElementById("materialsContainer");
+      const materialsGrandTotal = document.getElementById("materialsGrandTotal");
+
+      const loadingOverlay = document.getElementById("loadingOverlay");
+      const loadingText = document.getElementById("loadingText");
+
+      let materialsList = [];
+      let materialRowIndex = 0;
+
+      function setDefaultFormValues() {
+        document.getElementById("proposalNumber").value = "M-005";
+        document.getElementById("pricingDate").value = getTodayDateInputValue();
+        document.getElementById("projectName").value = "Project Name / Address";
+
+        document.getElementById("customerName").value = "Customer Name";
+        document.getElementById("customerRole").value = "Owner / Representative";
+        document.getElementById("companyName").value = "Company Name";
+        document.getElementById("addressLine1").value = "Project / Customer Address Line 1";
+        document.getElementById("addressLine2").value = "City, State ZIP";
+        document.getElementById("customerEmail").value = "customer@example.com";
+        document.getElementById("customerPhone").value = "000 000 0000";
+
+        document.getElementById("deliveryLocation").value = "Project location";
+        document.getElementById("estimatorName").value = "Jesus Orona";
+        document.getElementById("estimatorTitle").value = "Project Manager/Estimator";
+        document.getElementById("estimatorPhone").value = "585 412 2179";
+        document.getElementById("comments").value =
+          "Please review pricing, lead time, and payment terms before approval.";
+      }
+
+      function resetMaterialsUi() {
+        materialsContainer.innerHTML = "";
+        materialsGrandTotal.textContent = "0.00";
+        materialRowIndex = 0;
+        addMaterialRow();
+        calculateMaterialsTotal();
+      }
+
+      function setLoadingState(isLoading, text) {
+        if (isLoading) {
+          loadingOverlay.classList.remove("hidden");
+          loadingText.innerHTML = text || "Loading...";
+          btn.disabled = true;
+          form.classList.add("form-disabled");
+          [...form.elements].forEach((el) => (el.disabled = true));
+        } else {
+          loadingOverlay.classList.add("hidden");
+          btn.disabled = false;
+          form.classList.remove("form-disabled");
+          [...form.elements].forEach((el) => (el.disabled = false));
+        }
+      }
+
+      function loadMaterials() {
+        google.script.run
+          .withSuccessHandler((items) => {
+            materialsList = Array.isArray(items) ? items : [];
+            resetMaterialsUi();
+          })
+          .withFailureHandler((err) => {
+            msg.textContent = "Could not load materials: " + (err?.message || err);
+
+            materialsList = [];
+            resetMaterialsUi();
+          })
+          .getPricingMaterialsList();
+      }
+
+      function addMaterialRow() {
+        materialRowIndex++;
+
+        const row = document.createElement("div");
+        row.className = "material-row";
+        row.dataset.index = materialRowIndex;
+
+        row.innerHTML = `
+          <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+              <label class="form-label">Product</label>
+              <select class="form-select material-product" onchange="handleMaterialInput(this)">
+                <option value="">(select)</option>
+                ${
+                  materialsList.map((item) => {
+                    return `
+                      <option
+                        value="${escapeAttribute(item.name)}"
+                        data-default-qty="${Number(item.defaultQty || 1)}"
+                        data-price="${Number(item.price || 0)}"
+                        data-comments="${escapeAttribute(item.comments || "")}"
+                      >
+                        ${escapeHtml(item.name)}
+                      </option>
+                    `;
+                  }).join("")
+                }
+              </select>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Qty</label>
+              <input
+                type="number"
+                class="form-control material-quantity"
+                min="0"
+                step="1"
+                value=""
+                oninput="handleMaterialInput(this)"
+              />
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Price</label>
+              <input
+                type="number"
+                class="form-control material-value"
+                min="0"
+                step="0.01"
+                value=""
+                oninput="handleMaterialInput(this)"
+              />
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Total</label>
+              <input
+                type="text"
+                class="form-control material-total"
+                value="$0.00"
+                readonly
+              />
+            </div>
+
+            <div class="col-md-2 text-end">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="removeMaterialRow(this)"
+                title="Remove"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+
+          <div class="row g-2 mt-2">
+            <div class="col-md-10">
+              <label class="form-label">Notes</label>
+              <input
+                type="text"
+                class="form-control material-comments"
+                value=""
+                placeholder="Material notes"
+                oninput="handleMaterialInput(this)"
+              />
+            </div>
+          </div>
+        `;
+
+        materialsContainer.appendChild(row);
+      }
+
+      function handleMaterialInput(element) {
+        const row = element.closest(".material-row");
+
+        if (element.classList.contains("material-product")) {
+          const selectedOption = element.options[element.selectedIndex];
+
+          const defaultQty = Number(selectedOption.dataset.defaultQty || 1);
+          const price = Number(selectedOption.dataset.price || 0);
+          const comments = selectedOption.dataset.comments || "";
+
+          const quantityInput = row.querySelector(".material-quantity");
+          const valueInput = row.querySelector(".material-value");
+          const commentsInput = row.querySelector(".material-comments");
+
+          if (element.value) {
+            quantityInput.value = defaultQty || 1;
+            valueInput.value = price.toFixed(2);
+            commentsInput.value = comments || "";
+          } else {
+            quantityInput.value = "";
+            valueInput.value = "";
+            commentsInput.value = "";
+          }
+        }
+
+        calculateMaterialsTotal();
+        addEmptyRowIfNeeded();
+        cleanExtraEmptyRows();
+      }
+
+      function calculateMaterialsTotal() {
+        let grandTotal = 0;
+
+        document.querySelectorAll(".material-row").forEach((row) => {
+          const quantity = Number(row.querySelector(".material-quantity").value || 0);
+          const value = Number(row.querySelector(".material-value").value || 0);
+          const total = quantity * value;
+
+          row.querySelector(".material-total").value = "$" + total.toFixed(2);
+          grandTotal += total;
+        });
+
+        materialsGrandTotal.textContent = grandTotal.toFixed(2);
+      }
+
+      function addEmptyRowIfNeeded() {
+        const rows = Array.from(document.querySelectorAll(".material-row"));
+
+        if (!rows.length) {
+          addMaterialRow();
+          return;
+        }
+
+        const lastRow = rows[rows.length - 1];
+
+        if (isMaterialRowUsed(lastRow)) {
+          addMaterialRow();
+        }
+      }
+
+      function isMaterialRowUsed(row) {
+        const product = row.querySelector(".material-product").value;
+        const quantity = row.querySelector(".material-quantity").value;
+        const value = row.querySelector(".material-value").value;
+        const comments = row.querySelector(".material-comments").value;
+
+        return Boolean(product || quantity || value || comments);
+      }
+
+      function cleanExtraEmptyRows() {
+        const rows = Array.from(document.querySelectorAll(".material-row"));
+        const emptyRows = rows.filter((row) => !isMaterialRowUsed(row));
+
+        if (emptyRows.length <= 1) {
+          return;
+        }
+
+        emptyRows.forEach((row, index) => {
+          if (index > 0) {
+            row.remove();
+          }
+        });
+      }
+
+      function removeMaterialRow(button) {
+        const row = button.closest(".material-row");
+        row.remove();
+
+        const rows = document.querySelectorAll(".material-row");
+
+        if (!rows.length) {
+          addMaterialRow();
+        }
+
+        calculateMaterialsTotal();
+        cleanExtraEmptyRows();
+      }
+
+      function getSelectedMaterials() {
+        const materials = [];
+
+        document.querySelectorAll(".material-row").forEach((row) => {
+          const product = row.querySelector(".material-product").value;
+          const quantity = Number(row.querySelector(".material-quantity").value || 0);
+          const value = Number(row.querySelector(".material-value").value || 0);
+          const comments = row.querySelector(".material-comments").value || "";
+
+          if (product) {
+            materials.push({
+              product: product,
+              quantity: quantity,
+              value: value,
+              comments: comments,
+              total: quantity * value
+            });
+          }
+        });
+
+        return materials;
+      }
+
+      function validatePricingForm(data) {
+        if (!data.proposalNumber) return "Proposal # is required.";
+        if (!data.pricingDate) return "Pricing Date is required.";
+        if (!data.projectName) return "Project Name is required.";
+        if (!data.customerName) return "Customer Name is required.";
+
+        return "";
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        data.materials = getSelectedMaterials();
+
+        const validationError = validatePricingForm(data);
+
+        if (validationError) {
+          msg.textContent = "Error: " + validationError;
+          return;
+        }
+
+        msg.textContent = "";
+
+        setLoadingState(
+          true,
+          `<i class="fas fa-file-pdf me-2"></i> Creating PDF`
+        );
+
+        setTimeout(() => {
+          setSavingMessage(
+            loadingText,
+            `<i class="fas fa-table me-2"></i> Saving record into PDFs_Log`
+          );
+        }, 900);
+
+        google.script.run
+          .withSuccessHandler((json) => {
+            setLoadingState(false);
+
+            if (json && json.success) {
+              msg.innerHTML = renderSuccessMessage({
+                message: json.message || "Pricing PDF created successfully.",
+                url: json.pdfsLogUrl || "",
+                buttonText: "Open PDFs Log",
+                icon: "fas fa-table",
+                secondaryUrl: json.pdfUrl || "",
+                secondaryButtonText: "Open PDF",
+                secondaryIcon: "fas fa-file-pdf"
+              });
+
+              form.reset();
+              setDefaultFormValues();
+              resetMaterialsUi();
+            } else {
+              msg.textContent = "Error: " + (json?.error || "unknown");
+            }
+          })
+          .withFailureHandler((err) => {
+            setLoadingState(false);
+            msg.textContent = "Error: " + (err?.message || err);
+          })
+          .createPricingPdfFromHtml(data);
+      });
+
+      setDefaultFormValues();
+
+      loadCurrentUserLabel({
+        el: userInfo,
+        prefix: "Logged in as:"
+      });
+
+      loadMaterials();
+    </script>
+  </body>
+</html>

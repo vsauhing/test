@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <style>
+    @page {
+      size: letter;
+      margin: 28px 26px 28px 26px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #111;
+      line-height: 1.35;
+    }
+
+    .header-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+
+    .logo-title {
+      font-size: 27px;
+      font-weight: 900;
+      color: #a6191f;
+      line-height: 0.9;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-subtitle {
+      font-size: 20px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .doc-title {
+      font-size: 16px;
+      font-weight: 800;
+      text-align: right;
+      padding-top: 30px;
+    }
+
+    .proposal {
+      text-align: right;
+      margin-top: 16px;
+      margin-bottom: 30px;
+      font-size: 13px;
+    }
+
+    .date {
+      margin-bottom: 38px;
+    }
+
+    .customer {
+      margin-bottom: 30px;
+    }
+
+    .customer strong {
+      font-weight: 800;
+    }
+
+    .paragraph {
+      margin-bottom: 24px;
+      text-align: justify;
+    }
+
+    .materials {
+      margin: 16px 0 34px 14px;
+    }
+
+    .material-line {
+      margin-bottom: 7px;
+    }
+
+    .price-paragraph {
+      margin-top: 30px;
+      margin-bottom: 48px;
+      text-align: justify;
+    }
+
+    .signature {
+      margin-top: 24px;
+    }
+
+    .signature-space {
+      height: 48px;
+    }
+
+    .phone {
+      color: #1a73e8;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <table class="header-table">
+    <tr>
+      <td style="width: 55%; vertical-align: top;">
+        <div class="logo-title">
+          FIRE CURTAIN<br>
+          TECHNOLOGIES
+        </div>
+        <div class="logo-subtitle">
+          Smoke and Fire Curtains
+        </div>
+      </td>
+
+      <td style="width: 45%; vertical-align: top;">
+        <div class="doc-title">
+          BEST AND FINAL PRICING
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="proposal">
+    Proposal # <?= proposalNumber ?> <?= projectName ? '(' + projectName + ')' : '' ?>
+  </div>
+
+  <div class="date">
+    Date: <?= pricingDate ?>
+  </div>
+
+  <div class="customer">
+    <strong><?= customerName ?></strong><br>
+
+    <? if (customerRole) { ?>
+      <?= customerRole ?><br>
+    <? } ?>
+
+    <? if (companyName) { ?>
+      <?= companyName ?><br>
+    <? } ?>
+
+    <? if (addressLine1) { ?>
+      <?= addressLine1 ?><br>
+    <? } ?>
+
+    <? if (addressLine2) { ?>
+      <?= addressLine2 ?><br>
+    <? } ?>
+
+    <? if (customerEmail) { ?>
+      <?= customerEmail ?><br>
+    <? } ?>
+
+    <? if (customerPhone) { ?>
+      <?= customerPhone ?><br>
+    <? } ?>
+  </div>
+
+  <div class="paragraph">
+    Dear <?= firstName || customerName ?>:
+  </div>
+
+  <div class="paragraph">
+    Please find enclosed a proposal for replacement parts to be furnished in the
+    “<?= projectName ?>” project.
+  </div>
+
+  <div class="materials">
+    <? if (materials.length) { ?>
+      <? for (var i = 0; i < materials.length; i++) { ?>
+        <div class="material-line">
+          (<?= materials[i].quantity ?>)
+          &nbsp;&nbsp;
+          <?= materials[i].product ?>
+          <? if (materials[i].comments) { ?>
+            — <?= materials[i].comments ?>
+          <? } ?>
+        </div>
+      <? } ?>
+    <? } else { ?>
+      <div class="material-line">
+        No materials selected.
+      </div>
+    <? } ?>
+  </div>
+
+  <div class="price-paragraph">
+    The price of this material is $<?= materialsTotalFormatted ?> delivered to
+    <?= deliveryLocation || 'the project location' ?>.
+    Please review lead time and payment terms in conjunction with any
+    <?= proposalNumber ?> product information, source information, shop drawings,
+    and technical data for this project.
+  </div>
+
+  <? if (comments) { ?>
+    <div class="paragraph">
+      <?= comments ?>
+    </div>
+  <? } ?>
+
+  <div>
+    Best regards,
+  </div>
+
+  <div class="signature">
+    <div class="signature-space"></div>
+    <div><?= estimatorName ?></div>
+    <div><?= estimatorTitle ?></div>
+    <div class="phone"><?= estimatorPhone ?></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!-- File: shared_form_helpers.html -->
+<!-- Shared frontend helpers for FCT Spare Part Pricing Generator -->
+
+<script>
+  /************************************************************
+   * Escape helpers
+   ************************************************************/
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function escapeAttribute(value) {
+    return escapeHtml(value);
+  }
+
+  /************************************************************
+   * Select helper
+   *
+   * Supports:
+   * - plain strings
+   * - objects: [{ value: "...", label: "..." }]
+   ************************************************************/
+  function fillSelect(selectEl, list, includeSelectOption = true) {
+    if (!selectEl) return;
+
+    selectEl.innerHTML = "";
+
+    if (includeSelectOption) {
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = "(select)";
+      selectEl.appendChild(opt0);
+    }
+
+    (list || []).forEach((item) => {
+      const opt = document.createElement("option");
+
+      if (item && typeof item === "object") {
+        opt.value = item.value || "";
+        opt.textContent = item.label || item.value || "";
+
+        Object.keys(item).forEach((key) => {
+          if (key === "value" || key === "label") return;
+          opt.dataset[key] = item[key];
+        });
+      } else {
+        opt.value = item || "";
+        opt.textContent = item || "";
+      }
+
+      selectEl.appendChild(opt);
+    });
+  }
+
+  /************************************************************
+   * URL validation helper
+   ************************************************************/
+  function isValidHttpUrl(value) {
+    const text = String(value || "").trim();
+
+    if (!text) {
+      return true;
+    }
+
+    return /^https?:\/\/\S+$/i.test(text);
+  }
+
+  /************************************************************
+   * Loading overlay message helper
+   ************************************************************/
+  function setSavingMessage(loadingTextEl, html) {
+    if (!loadingTextEl) return;
+    loadingTextEl.innerHTML = html || "";
+  }
+
+  /************************************************************
+   * Current user label helper
+   ************************************************************/
+  function loadCurrentUserLabel(config) {
+    const cfg = config || {};
+    const el = cfg.el;
+    const prefix = cfg.prefix || "Logged in as:";
+
+    if (!el) return;
+
+    google.script.run
+      .withSuccessHandler((u) => {
+        if (!u || !u.email) {
+          el.textContent = "Not signed in with a company account.";
+          el.className = "text-center text-danger mb-4";
+          return;
+        }
+
+        el.textContent = `${prefix} ${u.name} (${u.email})`;
+        el.className = "text-center text-muted mb-4";
+      })
+      .withFailureHandler(() => {
+        el.textContent = "Could not load user info.";
+        el.className = "text-center text-danger mb-4";
+      })
+      .getCurrentUser();
+  }
+
+  /************************************************************
+   * Date helper
+   ************************************************************/
+  function getTodayDateInputValue() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  /************************************************************
+   * Standard success message renderer
+   ************************************************************/
+  function renderSuccessMessage(config) {
+    const cfg = config || {};
+
+    const message = cfg.message || "Saved successfully.";
+    const primaryUrl = cfg.url || "";
+    const primaryButtonText = cfg.buttonText || "Open Sheet";
+    const primaryIcon = cfg.icon || "fas fa-table";
+
+    const secondaryUrl = cfg.secondaryUrl || "";
+    const secondaryButtonText = cfg.secondaryButtonText || "Open PDF";
+    const secondaryIcon = cfg.secondaryIcon || "fas fa-file-pdf";
+
+    return `
+      <span class="text-success">${escapeHtml(message)}</span>
+      ${
+        primaryUrl
+          ? `
+            <a
+              href="${escapeAttribute(primaryUrl)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-sm btn-outline-primary ms-2"
+            >
+              <i class="${escapeAttribute(primaryIcon)} me-1"></i>
+              ${escapeHtml(primaryButtonText)}
+            </a>
+          `
+          : ""
+      }
+      ${
+        secondaryUrl
+          ? `
+            <a
+              href="${escapeAttribute(secondaryUrl)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-sm btn-outline-danger ms-2"
+            >
+              <i class="${escapeAttribute(secondaryIcon)} me-1"></i>
+              ${escapeHtml(secondaryButtonText)}
+            </a>
+          `
+          : ""
+      }
+    `;
+  }
+</script>

@@ -1,0 +1,51 @@
+<!-- =========================================================
+  File: shared_nav.html
+  Shared sidebar navigation layout
+========================================================= -->
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+
+    <nav class="sidebar-nav sidebar-nav-top" aria-label="Main navigation">
+
+      <? for (var i = 0; i < routes.length; i++) { ?>
+        <? var r = routes[i]; ?>
+
+        <a
+          href="<?!= r.url ?>"
+          target="_top"
+          class="sidebar-link <?!= currentPage === r.page ? 'active' : '' ?>"
+          title="<?!= r.navLabel || r.title ?>"
+        >
+          <i class="<?!= r.icon || 'fas fa-circle' ?>"></i>
+          <span class="sidebar-label"><?!= r.navLabel || r.title ?></span>
+        </a>
+
+      <? } ?>
+
+    </nav>
+
+    <nav class="sidebar-nav sidebar-nav-bottom" aria-label="Shortcut navigation">
+
+      <? if (typeof SIDEBAR_BOTTOM_LINKS !== 'undefined' && SIDEBAR_BOTTOM_LINKS.length) { ?>
+        <? for (var j = 0; j < SIDEBAR_BOTTOM_LINKS.length; j++) { ?>
+          <? var item = SIDEBAR_BOTTOM_LINKS[j]; ?>
+
+          <a
+            href="<?!= item.url ?>"
+            target="<?!= item.target || '_blank' ?>"
+            rel="noopener noreferrer"
+            class="sidebar-link sidebar-link-external"
+            title="<?!= item.title || item.label ?>"
+          >
+            <i class="<?!= item.icon || 'fas fa-external-link-alt' ?>"></i>
+            <span class="sidebar-label"><?!= item.label ?></span>
+          </a>
+
+        <? } ?>
+      <? } ?>
+
+    </nav>
+
+  </aside>
